@@ -471,6 +471,17 @@ function addItem(name, price){
 
 function setDiscount(percent, button){
 
+    if(currentDiscount === percent){
+
+        currentDiscount = 0;
+
+        button.classList.remove('active-discount');
+
+        updateOrder();
+
+        return;
+    }
+
     currentDiscount = percent;
 
     document.querySelectorAll('.discount-buttons button')
@@ -614,5 +625,6 @@ function finishOrder(){
 
 </body>
 </html>
+
 
 
