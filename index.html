@@ -1,4 +1,3 @@
-```html id="v2k8mn"
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -123,6 +122,21 @@ button:hover{
     font-weight:bold;
 }
 
+.discount-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
+
+.discount-buttons button{
+    background:#ff8800;
+}
+
+.active-discount{
+    background:red !important;
+}
+
 </style>
 </head>
 <body>
@@ -157,14 +171,29 @@ button:hover{
     </div>
 
     <div class="order-list">
+
         <h2>Rabatt</h2>
 
-        <input
-            type="number"
-            id="discount"
-            value="0"
-            placeholder="Rabatt eingeben"
-        >
+        <div class="discount-buttons">
+
+            <button onclick="setDiscount(15, this)">
+                15%
+            </button>
+
+            <button onclick="setDiscount(25, this)">
+                25%
+            </button>
+
+            <button onclick="setDiscount(30, this)">
+                30%
+            </button>
+
+            <button onclick="setDiscount(50, this)">
+                50%
+            </button>
+
+        </div>
+
     </div>
 
     <div class="total" id="total">
@@ -215,6 +244,8 @@ let selected = [];
 
 let timeLeft = 3600;
 let timerInterval;
+
+let currentDiscount = 0;
 
 function login(){
 
@@ -438,6 +469,20 @@ function addItem(name, price){
     updateOrder();
 }
 
+function setDiscount(percent, button){
+
+    currentDiscount = percent;
+
+    document.querySelectorAll('.discount-buttons button')
+    .forEach(btn => {
+        btn.classList.remove('active-discount');
+    });
+
+    button.classList.add('active-discount');
+
+    updateOrder();
+}
+
 function updateOrder(){
 
     const orders = document.getElementById("orders");
@@ -461,26 +506,18 @@ function updateOrder(){
 
     });
 
-    const discount =
-        parseInt(document.getElementById("discount").value) || 0;
+    const discountAmount =
+        total * (currentDiscount / 100);
 
-    total = total - discount;
+    total = total - discountAmount;
 
     if(total < 0){
         total = 0;
     }
 
     document.getElementById("total").innerHTML =
-        "Gesamt: $" + total;
+        "Gesamt: $" + Math.round(total);
 }
-
-document.addEventListener("input", function(e){
-
-    if(e.target.id === "discount"){
-
-        updateOrder();
-    }
-});
 
 function finishOrder(){
 
@@ -496,17 +533,17 @@ function finishOrder(){
             `${item.name} x${item.amount} = $${item.price * item.amount}\n`;
     });
 
-    const discount =
-        parseInt(document.getElementById("discount").value) || 0;
+    const discountAmount =
+        total * (currentDiscount / 100);
 
-    total = total - discount;
+    total = total - discountAmount;
 
     if(total < 0){
         total = 0;
     }
 
     const webhook =
-    "https://discordapp.com/api/webhooks/1509701828797923349/5zNaeOlzD-5gJl1W-_AR5jjpDCwv2bRdmmFS0xUXCE07WvdyQDleWCEDHZcCsbXwSKNO";
+    "HIER_DEIN_DISCORD_WEBHOOK_EINFÜGEN";
 
     fetch(webhook, {
 
@@ -531,14 +568,14 @@ function finishOrder(){
                         },
 
                         {
-                            name: "💸 Rabatt",
-                            value: "$" + discount,
+                            name: "🏷 Rabatt",
+                            value: currentDiscount + "%",
                             inline: true
                         },
 
                         {
                             name: "💰 Gesamt",
-                            value: "$" + total,
+                            value: "$" + Math.round(total),
                             inline: true
                         }
                     ],
@@ -559,17 +596,23 @@ function finishOrder(){
 
     selected = [];
 
+    currentDiscount = 0;
+
+    document.querySelectorAll('.discount-buttons button')
+    .forEach(btn => {
+        btn.classList.remove('active-discount');
+    });
+
     updateOrder();
 
     document.querySelectorAll('.quantity-input').forEach(input => {
         input.value = 0;
     });
-
-    document.getElementById("discount").value = 0;
 }
 
 </script>
 
 </body>
 </html>
-```
+
+
