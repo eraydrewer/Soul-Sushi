@@ -1,3 +1,4 @@
+```html id="v2k8mn"
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -155,6 +156,17 @@ button:hover{
         <div id="orders"></div>
     </div>
 
+    <div class="order-list">
+        <h2>Rabatt</h2>
+
+        <input
+            type="number"
+            id="discount"
+            value="0"
+            placeholder="Rabatt eingeben"
+        >
+    </div>
+
     <div class="total" id="total">
         Gesamt: $0
     </div>
@@ -171,30 +183,30 @@ const PASSWORD = "Soulsushi67";
 const menu = {
 
     "Sushi": [
-        {name:"Nigiri Sushi", price:300},
-        {name:"Maki Sushi", price:300},
-        {name:"Sashimi Sushi", price:450},
-        {name:"Chirashi Sushi", price:400},
-        {name:"Inari Sushi", price:300}
+        {name:"Nigiri Sushi", price:120},
+        {name:"Maki Sushi", price:140},
+        {name:"Sashimi Sushi", price:180},
+        {name:"Chirashi Sushi", price:200},
+        {name:"Inari Sushi", price:130}
     ],
 
     "Nachspeise": [
         {name:"Poki", price:150},
-        {name:"Erbeer Mochi", price:200}
+        {name:"Erbeer Mochi", price:90}
     ],
 
     "Hauptspeise": [
-        {name:"Rahmen", price:300},
-        {name:"Kugelfisch", price:600},
-        {name:"Bento", price:350},
+        {name:"Rahmen", price:220},
+        {name:"Kugelfisch", price:500},
+        {name:"Bento", price:250},
         {name:"Tempura", price:300}
     ],
 
     "Getränke": [
-        {name:"Grüntee", price:150},
-        {name:"Lychee", price:300},
-        {name:"Wasser", price:100},
-        {name:"Sake", price:450}
+        {name:"Grüntee", price:40},
+        {name:"Lychee", price:60},
+        {name:"Wasser", price:20},
+        {name:"Sake", price:120}
     ]
 
 };
@@ -449,11 +461,99 @@ function updateOrder(){
 
     });
 
+    const discount =
+        parseInt(document.getElementById("discount").value) || 0;
+
+    total = total - discount;
+
+    if(total < 0){
+        total = 0;
+    }
+
     document.getElementById("total").innerHTML =
         "Gesamt: $" + total;
 }
 
+document.addEventListener("input", function(e){
+
+    if(e.target.id === "discount"){
+
+        updateOrder();
+    }
+});
+
 function finishOrder(){
+
+    let total = 0;
+
+    let orderText = "";
+
+    selected.forEach(item => {
+
+        total += item.price * item.amount;
+
+        orderText +=
+            `${item.name} x${item.amount} = $${item.price * item.amount}\n`;
+    });
+
+    const discount =
+        parseInt(document.getElementById("discount").value) || 0;
+
+    total = total - discount;
+
+    if(total < 0){
+        total = 0;
+    }
+
+    const webhook =
+    "https://discordapp.com/api/webhooks/1509701828797923349/5zNaeOlzD-5gJl1W-_AR5jjpDCwv2bRdmmFS0xUXCE07WvdyQDleWCEDHZcCsbXwSKNO";
+
+    fetch(webhook, {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            embeds: [
+                {
+                    title: "🍣 Neue SoulSushi Bestellung",
+
+                    color: 16753920,
+
+                    fields: [
+                        {
+                            name: "📋 Bestellung",
+                            value: orderText || "Keine Bestellung"
+                        },
+
+                        {
+                            name: "💸 Rabatt",
+                            value: "$" + discount,
+                            inline: true
+                        },
+
+                        {
+                            name: "💰 Gesamt",
+                            value: "$" + total,
+                            inline: true
+                        }
+                    ],
+
+                    footer: {
+                        text: "SoulSushi System"
+                    },
+
+                    timestamp: new Date()
+                }
+            ]
+
+        })
+
+    });
 
     alert("Bestellung erfolgreich erstellt!");
 
@@ -464,13 +564,12 @@ function finishOrder(){
     document.querySelectorAll('.quantity-input').forEach(input => {
         input.value = 0;
     });
+
+    document.getElementById("discount").value = 0;
 }
 
 </script>
 
 </body>
 </html>
-
-
-
-
+```
