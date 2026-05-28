@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -90,10 +89,11 @@ button:hover{
     display:flex;
     gap:20px;
     justify-content:space-between;
+    flex-wrap:wrap;
 }
 
 .category-box{
-    width:33%;
+    width:23%;
 }
 
 .quantity-input{
@@ -177,6 +177,11 @@ const menu = {
         {name:"Sashimi Sushi", price:180},
         {name:"Chirashi Sushi", price:200},
         {name:"Inari Sushi", price:130}
+    ],
+
+    "Nachspeise": [
+        {name:"Poki", price:150},
+        {name:"Erbeer Mochi", price:90}
     ],
 
     "Hauptspeise": [
@@ -388,6 +393,7 @@ function finishOrder(){
 
 </body>
 </html>
-```
+
+
 
 
