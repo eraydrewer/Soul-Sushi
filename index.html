@@ -89,11 +89,10 @@ button:hover{
     display:flex;
     gap:20px;
     justify-content:space-between;
-    flex-wrap:wrap;
 }
 
 .category-box{
-    width:23%;
+    width:31%;
 }
 
 .quantity-input{
@@ -279,7 +278,84 @@ function renderMenu(){
 
     menuDiv.innerHTML = "";
 
-    for(let category in menu){
+    const sushiBox = document.createElement("div");
+    sushiBox.className = "category-box";
+
+    const sushiTitle = document.createElement("div");
+    sushiTitle.className = "category";
+    sushiTitle.innerHTML = "Sushi";
+
+    sushiBox.appendChild(sushiTitle);
+
+    menu["Sushi"].forEach((item) => {
+
+        const div = document.createElement("div");
+
+        div.className = "item";
+
+        div.innerHTML = `
+            <span>${item.name} - $${item.price}</span>
+
+            <div class="action-box">
+
+                <input
+                    type="number"
+                    min="1"
+                    value="0"
+                    id="${item.name}-qty"
+                    class="quantity-input"
+                >
+
+                <button onclick="addItem('${item.name}', ${item.price})">
+                    Hinzufügen
+                </button>
+
+            </div>
+        `;
+
+        sushiBox.appendChild(div);
+
+    });
+
+    const dessertTitle = document.createElement("div");
+    dessertTitle.className = "category";
+    dessertTitle.innerHTML = "Nachspeise";
+
+    sushiBox.appendChild(dessertTitle);
+
+    menu["Nachspeise"].forEach((item) => {
+
+        const div = document.createElement("div");
+
+        div.className = "item";
+
+        div.innerHTML = `
+            <span>${item.name} - $${item.price}</span>
+
+            <div class="action-box">
+
+                <input
+                    type="number"
+                    min="1"
+                    value="0"
+                    id="${item.name}-qty"
+                    class="quantity-input"
+                >
+
+                <button onclick="addItem('${item.name}', ${item.price})">
+                    Hinzufügen
+                </button>
+
+            </div>
+        `;
+
+        sushiBox.appendChild(div);
+
+    });
+
+    menuDiv.appendChild(sushiBox);
+
+    ["Hauptspeise", "Getränke"].forEach(category => {
 
         const categoryBox = document.createElement("div");
         categoryBox.className = "category-box";
@@ -290,7 +366,7 @@ function renderMenu(){
 
         categoryBox.appendChild(title);
 
-        menu[category].forEach((item, index) => {
+        menu[category].forEach((item) => {
 
             const div = document.createElement("div");
 
@@ -321,7 +397,8 @@ function renderMenu(){
         });
 
         menuDiv.appendChild(categoryBox);
-    }
+
+    });
 }
 
 function addItem(name, price){
