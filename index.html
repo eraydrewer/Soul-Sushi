@@ -299,7 +299,7 @@ function renderMenu(){
                     <input
                         type="number"
                         min="1"
-                        value="1"
+                        value="0"
                         id="${item.name}-qty"
                         class="quantity-input"
                     >
@@ -324,25 +324,22 @@ function addItem(name, price){
     const qtyInput =
         document.getElementById(name + "-qty");
 
-    const quantity =
-        parseInt(qtyInput.value) || 1;
+    qtyInput.value = parseInt(qtyInput.value) + 1;
 
     const found = selected.find(i => i.name === name);
 
     if(found){
 
-        found.amount += quantity;
+        found.amount += 1;
 
     }else{
 
         selected.push({
             name:name,
             price:price,
-            amount:quantity
+            amount:1
         });
     }
-
-    qtyInput.value = parseInt(qtyInput.value) + quantity;
 
     updateOrder();
 }
@@ -381,6 +378,10 @@ function finishOrder(){
     selected = [];
 
     updateOrder();
+
+    document.querySelectorAll('.quantity-input').forEach(input => {
+        input.value = 0;
+    });
 }
 
 </script>
