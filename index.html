@@ -2,384 +2,478 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>AUTOHAUS - AUTOHAUS SYSTEM</title>
-
+<title>THE LUX - ELITE POS v19 PLATINUM</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    background: radial-gradient(circle at top, #1e2a47, #0b1020);
-    color: #fff;
+:root {
+    --primary: #3a6df0; 
+    --primary-glow: rgba(58, 109, 240, 0.5);
+    --bg: #030305; 
+    --card: rgba(18, 18, 24, 0.6); 
+    --border: rgba(255, 255, 255, 0.05);
+    --text: #ffffff; 
+    --text-dim: #8a8f9d; 
+    --danger: #ff3333; 
+    --success: #00ff95;
+    --accent-gradient: linear-gradient(135deg, #3a6df0 0%, #a855f7 100%);
 }
 
-.header {
-    width: 100%;
-    padding: 25px;
-    text-align: center;
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: 3px;
-    font-family: 'Orbitron', sans-serif;
-    text-transform: uppercase;
-
-    background: linear-gradient(90deg, #3a6df0, #274bb5, #3a6df0);
-    background-size: 200% 200%;
-    animation: glowMove 6s ease infinite;
-
-    color: white;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    text-shadow: 0 0 10px rgba(58,109,240,0.8);
-}
-  @keyframes glowMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}  
-
-.login-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-
-    /* HINTERGRUND BILD */
-    background: url("image.png") no-repeat center center/cover;
-
-    position: relative;
-}
-    .login-screen::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    background: rgba(0, 0, 0, 0.65);
-}
-
-.login-box {
-    background: rgba(25, 25, 40, 0.95);
-    padding: 45px;
-    border-radius: 18px;
-    width: 320px;
-    text-align: center;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-}
-.login-box {
-    position: relative;
-    z-index: 2;
-}
-.login-box input {
-    width: 100%;
-    padding: 14px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: none;
-    background: #1f2438;
-    color: white;
-}
-
-.app {
-    display: none;
-}
-
-.main {
-    padding: 50px;
-}
-
-.container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 35px;
-    max-width: 1400px;
-    margin: auto;
-}
-
-@media (max-width: 1100px) {
-    .container { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 700px) {
-    .container { grid-template-columns: 1fr; }
-}
-
-.card {
-    background: rgba(25, 25, 40, 0.7);
-    border: 1px solid rgba(255,255,255,0.08);
-    padding: 30px;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    backdrop-filter: blur(12px);
-    transition: 0.2s;
-    min-height: 540px;
+#custom-alert-container {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20000;
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 45px rgba(0,0,0,0.7);
-}
-
-.card h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 22px;
-}
-
-input {
-    width: 100%;
-    padding: 14px;
-    margin: 12px 0;
-    border-radius: 10px;
-    border: none;
-    background: #1f2438;
+.custom-alert {
+    background: var(--card);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
     color: white;
-}
-
-button {
-    width: 100%;
-    padding: 15px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #3a6df0, #274bb5);
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: auto;
-}
-
-.discount-wrap {
+    padding: 18px 40px;
+    border-radius: 20px;
+    font-weight: 700;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     display: flex;
-    gap: 8px;
-    margin-top: 12px;
+    align-items: center;
+    gap: 15px;
+    animation: alertIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    border-left: 5px solid var(--primary);
 }
 
-.btn-discount {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    background: #1a1f33;
-    border: 1px solid rgba(255,255,255,0.05);
-    cursor: pointer;
+.custom-alert.error { border-left-color: var(--danger); }
+.custom-alert.success { border-left-color: var(--success); }
+
+@keyframes alertIn {
+    from { opacity: 0; transform: translateY(-20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.btn-discount.active {
-    background: #3a6df0;
+@keyframes alertOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-20px) scale(0.9); }
 }
 
-.result {
-    text-align: center;
-    font-weight: bold;
-    margin-top: 18px;
+#plexus-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif; 
+    background: var(--bg); 
+    color: var(--text); 
+    margin: 0; 
+    padding: 20px;
+    overflow-x: hidden;
+    background-attachment: fixed; 
+    min-height: 100vh;
+}
+
+#header-info { 
+    position: fixed; top: 20px; left: 20px; z-index: 1000; 
+    background: rgba(255, 255, 255, 0.03); 
+    padding: 15px 25px; 
+    border-radius: 20px; 
+    border: 1px solid var(--border); 
+    backdrop-filter: blur(20px); 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+#nav-right { 
+    position: fixed; top: 20px; right: 20px; display: none; gap: 12px; z-index: 1000; 
+}
+
+.section { 
+    display: none; margin-top: 120px; max-width: 1400px; margin-left: auto; margin-right: auto; 
+}
+
+.active { display: block !important; animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+@keyframes slideUp { 
+    from { opacity: 0; transform: translateY(30px); filter: blur(10px); } 
+    to { opacity: 1; transform: translateY(0); filter: blur(0); } 
+}
+
+.cat-nav { 
+    display: flex; gap: 15px; margin-bottom: 40px; padding: 5px; overflow-x: auto; scrollbar-width: none;
+}
+
+.btn-cat { 
+    background: var(--card); color: var(--text-dim); border: 1px solid var(--border); 
+    padding: 16px 30px; border-radius: 18px; cursor: pointer; font-weight: 600; 
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); white-space: nowrap; backdrop-filter: blur(10px);
+}
+
+.btn-cat.active { 
+    background: var(--accent-gradient); color: white; border-color: transparent; 
+    box-shadow: 0 10px 25px var(--primary-glow); transform: translateY(-3px) scale(1.02);
+}
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+
+.card { 
+    background: var(--card); padding: 30px; border-radius: 28px; border: 1px solid var(--border); 
+    backdrop-filter: blur(15px); transition: all 0.4s ease; position: relative; overflow: hidden;
+}
+
+.card:hover { 
+    border-color: var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.6); transform: translateY(-5px);
+}
+
+.qty-ctrl { 
+    display: flex; align-items: center; justify-content: space-between; 
+    background: rgba(0,0,0,0.4); border-radius: 20px; margin-top: 25px; height: 60px; border: 1px solid var(--border);
+}
+
+.qty-btn { width: 65px; height: 100%; background: transparent; color: white; border: none; font-size: 26px; cursor: pointer; }
+.qty-input { width: 70px; background: transparent; border: none; color: white; text-align: center; font-weight: 800; font-size: 22px; outline: none; }
+
+button { 
+    padding: 16px 28px; border-radius: 18px; border: none; cursor: pointer; 
+    font-weight: 700; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: inherit;
+}
+
+.btn-blue { background: var(--accent-gradient); color: white; box-shadow: 0 8px 20px var(--primary-glow); }
+.btn-blue:hover { transform: translateY(-2px); box-shadow: 0 12px 25px var(--primary-glow); filter: brightness(1.1); }
+.btn-red { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); color: white; }
+.btn-dark { background: rgba(255,255,255,0.03); color: white; border: 1px solid var(--border); backdrop-filter: blur(5px); }
+
+#bill-area { margin-top: 60px; background: rgba(58, 109, 240, 0.03); padding: 40px; border-radius: 40px; border: 1px solid rgba(58, 109, 240, 0.2); }
+#bill-total { font-size: 48px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+#bill-items {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+#bill-items li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    color: var(--text-dim);
     font-size: 18px;
-    color: #dbe6ff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.discount-wrap { display: flex; gap: 10px; margin-bottom: 30px; }
+.btn-discount { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: var(--text-dim); border-radius: 12px; font-size: 14px; }
+.btn-discount.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10000; backdrop-filter: blur(15px); }
+.modal-content { background: #0a0a0e; padding: 50px; border-radius: 40px; border: 1px solid var(--border); width: 95%; max-width: 650px; position: relative; }
+
+#login-overlay { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+
+.login-card {
+    background: var(--card); padding: 60px; border-radius: 50px; width: 420px; text-align: center; 
+    border: 1px solid var(--border); backdrop-filter: blur(40px);
+    box-shadow: 0 0 60px var(--primary-glow); 
+    animation: entrance 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes entrance { from { transform: scale(0.9) translateY(20px); opacity: 0; filter: blur(10px); } to { transform: scale(1) translateY(0); opacity: 1; filter: blur(0); } }
+
+input, select { 
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: white; 
+    padding: 18px; border-radius: 18px; width: 100%; margin-bottom: 15px; 
+    font-family: inherit; font-size: 16px; box-sizing: border-box; outline: none;
+}
+input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); }
+
+#staff-name-input {
+    border: 2px solid rgba(58, 109, 240, 0.3);
+    background: rgba(0,0,0,0.5);
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
 }
 </style>
 </head>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 <body>
 
-<div class="login-screen" id="login">
-    <div class="login-box">
-        <h2>Login</h2>
-        <input id="user" placeholder="Benutzername">
-        <input id="pass" type="password" placeholder="Passwort">
-        <button onclick="loginUser()">Einloggen</button>
+<canvas id="plexus-bg"></canvas>
+<div id="custom-alert-container"></div>
+
+<div id="header-info">
+    <div id="time-display" style="font-size: 24px; font-weight: 800; letter-spacing: -1px;">00:00:00</div>
+</div>
+
+<div id="nav-right">
+    <button id="dash-btn" class="btn-dark" onclick="toggleView()" style="display:none;">MGMT</button>
+    <button class="btn-red" onclick="location.reload()" style="padding: 16px 20px;">✕</button>
+</div>
+
+<div id="login-overlay">
+    <div class="login-card">
+        <div style="font-size: 12px; letter-spacing: 6px; color: var(--primary); margin-bottom: 15px; font-weight: 800; opacity: 0.8;">PREMIUM POS</div>
+        <h1 style="font-size: 56px; margin: 0 0 40px 0; letter-spacing: -3px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">THE LUX</h1>
+        <input type="text" id="logU" placeholder="Benutzername">
+        <input type="password" id="logP" placeholder="Passwort">
+        <button class="btn-blue" style="width:100%; margin-top: 20px; padding: 22px; font-size: 16px; letter-spacing: 1px;" onclick="login()">ZUGRIFF BESTÄTIGEN</button>
     </div>
 </div>
 
-<div class="app" id="app">
+<div id="main-ui" class="section">
+    <div class="cat-nav" id="cat-nav-bar">
+        <button class="btn-cat active" onclick="changeTab('Getränke', this)">Getränke</button>
+        <button class="btn-cat" onclick="changeTab('Snacks', this)">Snacks</button>
+        <button class="btn-cat" onclick="changeTab('Fahrten', this)">Fahrten</button>
+        <button class="btn-cat" onclick="changeTab('Heli', this)">Flüge</button>
+        <button class="btn-cat" onclick="changeTab('Fightclub', this)">Fightclub</button>
+        <button class="btn-cat" onclick="changeTab('Wetten', this)">Wetten</button>
+    </div>
+    <div class="grid" id="grid-pos"></div>
+    
+    <div id="bet-form" style="display:none; background: var(--card); padding: 50px; border-radius: 40px; border: 1px solid var(--border);">
+        <h2 style="margin-top:0; font-size: 32px;">Wette platzieren</h2>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <input type="text" id="bet-user" placeholder="Name">
+            <input type="text" id="bet-tel" placeholder="Tel">
+            <input type="number" id="bet-amount" placeholder="Einsatz">
+            <input type="text" id="bet-target" placeholder="Wette auf...">
+        </div>
+        <button class="btn-blue" style="width:100%; margin-top:30px; padding: 22px;" onclick="addBetToBill()">WETTE HINZUFÜGEN</button>
+    </div>
 
-<div class="header">Marler Autohaus</div>
-
-<div class="main">
-<div class="container">
-
-<!-- ANKAUF -->
-<div class="card">
-<h2>🚗 Ankauf</h2>
-<input id="a_auto" placeholder="Auto Name">
-<input id="a_chip" placeholder="Chip">
-<input id="a_preis" type="number" placeholder="Preis (€)">
-<input id="a_vor" placeholder="Vorbesitzer">
-<input id="a_mit" placeholder="Mitarbeiter">
-<button onclick="ankauf()">Quittung erstellen</button>
+    <div id="bill-area">
+        <input type="text" id="staff-name-input" placeholder="DEIN NAME (FÜR QUITTUNG)">
+        <div id="bill-items"></div>
+        <div class="discount-wrap">
+            <button class="btn-discount active" onclick="setDiscount(0, this)">0%</button>
+            <button class="btn-discount" onclick="setDiscount(25, this)">25%</button>
+            <button class="btn-discount" onclick="setDiscount(50, this)">50%</button>
+            <button class="btn-discount" onclick="setDiscount(75, this)">75%</button>
+            <button class="btn-discount" onclick="setDiscount(100, this)">100%</button>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; border-top: 1px solid var(--border); padding-top: 30px;">
+            <span style="color: var(--text-dim); font-weight: 600; font-size: 18px;">GESAMTBERECHNUNG</span>
+            <span id="bill-total">0 EUR</span>
+        </div>
+        <button class="btn-blue" style="width:100%; margin-top:40px; font-size:22px; padding: 30px;" onclick="checkout()">QUITTUNG ABSCHLIESSEN</button>
+    </div>
 </div>
 
-<!-- VERKAUF -->
-<div class="card">
-<h2>💰 Verkauf</h2>
-<input id="v_auto" placeholder="Auto Name">
-<input id="v_preis" type="number" placeholder="Preis (€)" oninput="calcSale()">
-<input id="v_vor" placeholder="Vorbesitzer">
-<input id="v_mit" placeholder="Mitarbeiter">
-
-<div class="discount-wrap">
-<button class="btn-discount active" onclick="setDiscount(0,this)">0%</button>
-<button class="btn-discount" onclick="setDiscount(25,this)">25%</button>
-<button class="btn-discount" onclick="setDiscount(50,this)">50%</button>
-<button class="btn-discount" onclick="setDiscount(75,this)">75%</button>
-<button class="btn-discount" onclick="setDiscount(100,this)">100%</button>
+<div id="dash-ui" class="section">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:50px;">
+        <h1 style="margin:0; font-size:42px; font-weight: 800;">Management</h1>
+        <button class="btn-blue" onclick="openModal('modal-new-user')">+ Mitarbeiter</button>
+    </div>
+    <div id="user-list" class="grid"></div>
+    <h2 style="margin-top:80px; margin-bottom:30px;">Lagerverwaltung</h2>
+    <div id="lager-list" class="grid"></div>
 </div>
 
-<div class="result" id="endpreis">Preis: 0€</div>
-<button onclick="verkauf()">Speichern</button>
-</div>
-
-<!-- REPARATUR -->
-<div class="card">
-<h2>🔧 Reparaturkasten</h2>
-<input id="r_anzahl" type="number" placeholder="Anzahl" oninput="calcRepair()">
-<input id="r_mit" placeholder="Mitarbeiter">
-
-<div class="discount-wrap">
-<button class="btn-discount active" onclick="setRepairDiscount(0,this)">0%</button>
-<button class="btn-discount" onclick="setRepairDiscount(25,this)">25%</button>
-<button class="btn-discount" onclick="setRepairDiscount(50,this)">50%</button>
-<button class="btn-discount" onclick="setRepairDiscount(75,this)">75%</button>
-<button class="btn-discount" onclick="setRepairDiscount(100,this)">100%</button>
-</div>
-
-<div class="result" id="r_preis">Preis: 0€</div>
-<button onclick="repairQuittung()">Quittung erstellen</button>
-</div>
-
-</div>
-</div>
-</div>
+<div id="modal-new-user" class="modal"><div class="modal-content"><h3>Neuer Zugang</h3><input type="text" id="new-u-name" placeholder="Name"><input type="password" id="new-u-pass" placeholder="Passwort"><select id="new-u-role"><option>Management</option><option>Geschäftsführer</option></select><div style="display:flex; gap:15px; margin-top:40px;"><button class="btn-blue" style="flex:2" onclick="saveNewUser()">SPEICHERN</button><button class="btn-dark" style="flex:1" onclick="closeModals()">ABBRUCH</button></div></div></div>
+<div id="modal-lager-edit" class="modal"><div class="modal-content"><h3 id="lager-edit-title">Bestand</h3><input type="number" id="lager-edit-val" placeholder="Menge"><button class="btn-blue" style="width:100%" onclick="saveLagerEdit()">SPEICHERN</button></div></div>
 
 <script>
-const ANKAUF_WEBHOOK = "https://discord.com/api/webhooks/1494651776580976702/sb9EyQkeB2uaF-z49PeZOmAKEdYBDgz35_a6rytH1VJsClvUhRxp5qSztwdtOBcHFohe";
-const VERKAUF_WEBHOOK = "https://discord.com/api/webhooks/1494652790083948665/9a3lOK0zwytNryDWan4PF6lczbIRJFCTAPh8DKO7q42rE8uCmyLPs-EIoNlryLZTcvfW";
-const REPARATUR_WEBHOOK = "https://discord.com/api/webhooks/1494652894987817112/EWSxRK8PCVnHhgarD7emVplEqHVod7sX14Kg-C9TCgH7uIxl0rlQCADMLCIioVUQ2edt";
-function loginUser() {
-    const u = document.getElementById("user").value;
-    const p = document.getElementById("pass").value;
+// NEUE DATABASE CONFIGURATION
+const CLOUD_DB = "https://logs-76d8c-default-rtdb.firebaseio.com/data.json";
 
-    if (u === "Mitarbeiter" && p === "Staff2026") {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("app").style.display = "block";
-    } else {
-        alert("Falsche Daten!");
-    }
+const WH_MAIN = "https://discord.com/api/webhooks/1480511718445547564/eF7F71sEzjAeEuisEI8C59wX9yzhiw8ClXaGHG45Vo7ZLuZgNXftx0tUpgG-w6ISe2pe";
+const WH_BETS = "https://discord.com/api/webhooks/1480522708092588064/zdVPCFNZL7SEv9taen6e4zqFYZca32uHVTWC6HDMBisTkG8dQfi5YwFjtaOsYrv8fRkH";
+const WH_STOCK_ALERT = "https://discord.com/api/webhooks/1480549073256710214/nXBqxQMs8fo5PLo_sVyH7STy2tUqOauxdRCXek0gd1lmBDCtb0Qw0WsguY_J1WCs7ecj";
+
+const ALL_PRODUCTS = [
+    {n:"Wasser", p:100, c:"Getränke"}, {n:"Eistee", p:100, c:"Getränke"}, {n:"Cola", p:100, c:"Getränke"}, {n:"Energy Drink", p:100, c:"Getränke"}, 
+    {n:"Bier", p:160, c:"Getränke"}, {n:"Wein", p:240, c:"Getränke"}, {n:"Berliner Luft", p:300, c:"Getränke"}, {n:"Champagner", p:300, c:"Getränke"}, 
+    {n:"Vodka", p:300, c:"Getränke"}, {n:"Whiskey", p:300, c:"Getränke"},
+    {n:"Pommes", p:160, c:"Snacks"}, {n:"Burger", p:200, c:"Snacks"}, {n:"Curly Fries", p:200, c:"Snacks"},
+    {n:"Grundgebühr Fahrt", p:10000, c:"Fahrten"}, {n:"Kilometer Fahrt", p:200, c:"Fahrten"},
+    {n:"Grundgebühr Heli", p:20000, c:"Heli"}, {n:"Kilometer Heli", p:500, c:"Heli"},
+    {n:"Event Eintritt", p:5000, c:"Fightclub"}, {n:"Miete Grundgebühr 1H", p:50000, c:"Fightclub"}, {n:"+30 Minuten", p:30000, c:"Fightclub"}
+];
+
+let users = [{name:"LUX_STAFF", pass:"Staff3221", role:"Geschäftsinhaber"}];
+let lager = {};
+let basket = {}, manualBets = [], currentUser = null, currentEditLager = null;
+let currentDiscount = 0;
+
+function showAlert(msg, type = 'info') {
+    const container = document.getElementById('custom-alert-container');
+    const alert = document.createElement('div');
+    alert.className = `custom-alert ${type}`;
+    alert.innerHTML = `<span>${msg}</span>`;
+    container.appendChild(alert);
+    setTimeout(() => {
+        alert.style.animation = 'alertOut 0.5s forwards';
+        setTimeout(() => alert.remove(), 500);
+    }, 3000);
 }
 
-function formatEuro(num){
-    return num.toLocaleString('de-DE') + "€";
+async function save() { await fetch(CLOUD_DB, { method: 'PUT', body: JSON.stringify({ users, lager }) }); }
+async function load() {
+    try {
+        const r = await fetch(CLOUD_DB);
+        const d = await r.json();
+        if(d && d.users) users = d.users;
+        if(d && d.lager) lager = d.lager;
+    } catch(e) {}
 }
 
-let discount = 0;
-let repairDiscount = 0;
+function login() {
+    const u = document.getElementById('logU').value, p = document.getElementById('logP').value;
+    const f = users.find(x => x.name === u && x.pass === p);
+    if(f) {
+        currentUser = f;
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('nav-right').style.display = 'flex';
+        document.getElementById('main-ui').classList.add('active');
+        if(["Geschäftsinhaber", "Geschäftsführer", "Management"].includes(f.role)) document.getElementById('dash-btn').style.display = 'block';
+        ALL_PRODUCTS.forEach(i => { if(lager[i.n] === undefined) lager[i.n] = 999; });
+        changeTab('Getränke', document.querySelector('.btn-cat'));
+        showAlert(`Willkommen`, 'success');
+    } else showAlert("ZUGANGSCODE FALSCH", 'error');
+}
 
-function ankauf() {
-    const auto = document.getElementById("a_auto").value;
-    const preis = document.getElementById("a_preis").value;
-    const vor = document.getElementById("a_vor").value;
-    const mit = document.getElementById("a_mit").value;
+function changeTab(cat, btn) {
+    document.querySelectorAll('.btn-cat').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+    if(cat === "Wetten") { document.getElementById('grid-pos').style.display='none'; document.getElementById('bet-form').style.display='block'; }
+    else { document.getElementById('grid-pos').style.display='grid'; document.getElementById('bet-form').style.display='none'; renderPOS(cat === "Flüge" ? "Heli" : cat); }
+}
 
-    if (!auto || !preis || !vor || !mit) {
-        alert("Bitte alles ausfüllen!");
-        return;
-    }
+function renderPOS(cat) {
+    document.getElementById('grid-pos').innerHTML = ALL_PRODUCTS.filter(i => i.c === cat).map(i => `
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <div><b style="font-size:18px;">${i.n}</b><br><small style="color:var(--text-dim)">Lager: ${lager[i.n]}</small></div>
+                <div style="font-weight:800; color:var(--primary); font-size:20px;">${i.p}€</div>
+            </div>
+            <div class="qty-ctrl">
+                <button class="qty-btn" onclick="updateBasket('${i.n}',-1)">−</button>
+                <input type="number" class="qty-input" id="inp-${i.n}" value="${basket[i.n]||0}" oninput="manualInput('${i.n}', this.value)">
+                <button class="qty-btn" onclick="updateBasket('${i.n}',1)">+</button>
+            </div>
+        </div>`).join('');
+}
 
-    sendToDiscord(ANKAUF_WEBHOOK, "🧾 Neue Rechnung", [
-        { name: "Auto", value: auto, inline: false },
-        { name: "Preis", value: preis + "€", inline: false },
-        { name: "Vorbesitzer", value: vor, inline: false },
-        { name: "Mitarbeiter", value: mit, inline: false }
-    ], 3447003);
+function updateBasket(name, val) { manualInput(name, (basket[name] || 0) + val); }
+function manualInput(name, val) {
+    let t = parseInt(val) || 0; if(t < 0) t = 0; basket[name] = t;
+    const inp = document.getElementById(`inp-${name}`); if(inp) inp.value = t;
+    renderBill();
+}
 
-    alert("Ankauf gesendet!");
+function addBetToBill() {
+    const n = document.getElementById('bet-user').value, 
+          a = parseInt(document.getElementById('bet-amount').value),
+          t = document.getElementById('bet-target').value;
+    if(!n || a < 10000 || !t) return showAlert("Daten unvollständig (Min. 10k € + Ziel)", 'error');
+    manualBets.push({name:n, amount:a, target:t}); 
+    document.getElementById('bet-user').value = ""; document.getElementById('bet-amount').value = ""; document.getElementById('bet-target').value = "";
+    renderBill();
+    showAlert("Wette hinzugefügt");
 }
 
 function setDiscount(val, btn) {
-    discount = val;
-    document.querySelectorAll('.discount-wrap')[0]
-        .querySelectorAll('button')
-        .forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    calcSale();
+    currentDiscount = val; document.querySelectorAll('.btn-discount').forEach(b => b.classList.remove('active')); btn.classList.add('active'); renderBill();
 }
 
-function calcSale() {
-    let preis = parseFloat(v_preis.value) || 0;
-    let end = preis - (preis * discount / 100);
-    endpreis.innerText = "Preis: " + formatEuro(end);
-}
-
-function verkauf() {
-    const auto = document.getElementById("v_auto").value;
-    const preis = document.getElementById("v_preis").value;
-    const vor = document.getElementById("v_vor").value;
-    const mit = document.getElementById("v_mit").value;
-
-    if (!auto || !preis || !vor || !mit) {
-        alert("Bitte alles ausfüllen!");
-        return;
+function renderBill() {
+    const billItems = document.getElementById('bill-items'); billItems.innerHTML = "";
+    let t = 0, productsTotal = 0;
+    for(let n in basket) {
+        if(basket[n] > 0) {
+            let i = ALL_PRODUCTS.find(p=>p.n===n); let sub = basket[n] * i.p;
+            productsTotal += sub;
+            billItems.innerHTML += `<li><span>${n} x${basket[n]}</span> <span>${sub.toLocaleString()} EUR</span></li>`;
+        }
     }
-
-    sendToDiscord(VERKAUF_WEBHOOK, "🧾 Neue Rechnung", [
-        { name: "Auto", value: auto, inline: false },
-        { name: "Preis", value: preis + "€", inline: false },
-        { name: "Vorbesitzer", value: vor, inline: false },
-        { name: "Mitarbeiter", value: mit, inline: false }
-    ], 5763719);
-
-    alert("Verkauf gesendet!");
+    let disc = productsTotal * (currentDiscount / 100); t = productsTotal - disc;
+    if(currentDiscount > 0) billItems.innerHTML += `<li style="color:var(--success)"><span>Rabatt</span> <span>-${disc.toLocaleString()} EUR</span></li>`;
+    manualBets.forEach(b => { t += b.amount; billItems.innerHTML += `<li><span>Wette [${b.target}] (${b.name})</span> <span>${b.amount.toLocaleString()} EUR</span></li>`; });
+    document.getElementById('bill-total').innerText = t.toLocaleString()+" EUR"; return t;
 }
 
-function setRepairDiscount(val, btn) {
-    repairDiscount = val;
-    document.querySelectorAll('.discount-wrap')[1]
-        .querySelectorAll('button')
-        .forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    calcRepair();
-}
+async function checkout() {
+    const staffName = document.getElementById('staff-name-input').value.trim();
+    if(!staffName) return showAlert("BITTE DEINEN NAMEN EINGEBEN!", 'error');
+    
+    const total = renderBill();
+    if (total === 0) return showAlert("Warenkorb leer", 'error');
 
-function calcRepair() {
-    let preis = (parseInt(r_anzahl.value) || 0) * 4000;
-    let end = preis - (preis * repairDiscount / 100);
-    r_preis.innerText = "Preis: " + formatEuro(end);
-}
-    function repairQuittung() {
-    const anzahl = parseInt(document.getElementById("r_anzahl").value) || 0;
-    const mit = document.getElementById("r_mit").value;
-
-    if (!anzahl || !mit) {
-        alert("Bitte alles ausfüllen!");
-        return;
+    let itemsLog = "";
+    for (let name in basket) {
+        if (basket[name] > 0) {
+            itemsLog += `• ${name} x${basket[name]}\n`;
+            if (lager[name] !== undefined) {
+                lager[name] -= basket[name];
+                if (lager[name] < 20) fetch(WH_STOCK_ALERT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ embeds: [{ title: "Lager niedrig!", description: name + ": " + lager[name] }] }) });
+            }
+        }
     }
-
-    const preis = anzahl * 4000;
-    const end = preis - (preis * repairDiscount / 100);
-
-    sendToDiscord(REPARATUR_WEBHOOK, "🧾 Neue Rechnung", [
-        { name: "Anzahl", value: String(anzahl), inline: false },
-        { name: "Preis", value: end + "€", inline: false },
-        { name: "Mitarbeiter", value: mit, inline: false }
-    ], 15548997);
-
-    alert("Reparatur gesendet!");
-}
-function sendToDiscord(webhook, title, fields, color = 3447003) {
-    fetch(webhook, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            embeds: [{
-                title: title,
-                color: color,
-                fields: fields
-            }]
-        })
+    
+    manualBets.forEach(b => {
+        itemsLog += `• Wette (${b.name}) auf [${b.target}] - ${b.amount.toLocaleString()} EUR\n`;
+        fetch(WH_BETS, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ 
+            embeds: [{ title: "🎰 NEUE WETTE", color: 11040503, fields: [
+                { name: "Kunde", value: b.name, inline: true }, 
+                { name: "Einsatz", value: b.amount.toLocaleString() + " EUR", inline: true },
+                { name: "Wette auf", value: b.target },
+                { name: "Angenommen von", value: staffName }
+            ], timestamp: new Date().toISOString() }] 
+        }) });
     });
-}
-</script>
 
+    const payload = { embeds: [{ title: "🧾 NEUE QUITTUNG", color: 3829232, fields: [{ name: "Mitarbeiter (Name)", value: staffName, inline: true }, { name: "Summe", value: total.toLocaleString() + " EUR", inline: true }, { name: "Artikel", value: itemsLog || "Keine" }], timestamp: new Date().toISOString() }] };
+    fetch(WH_MAIN, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+    basket = {}; manualBets = []; renderBill(); await save();
+    const curCat = document.querySelector('.btn-cat.active').innerText; renderPOS(curCat === "Flüge" ? "Heli" : curCat);
+    showAlert("QUITTUNG ERSTELLT", 'success');
+}
+
+function toggleView() {
+    document.getElementById('dash-ui').classList.toggle('active');
+    document.getElementById('main-ui').classList.toggle('active');
+    if(document.getElementById('dash-ui').classList.contains('active')) renderManagement();
+}
+
+function renderManagement() {
+    document.getElementById('user-list').innerHTML = users.map((u, i) => `<div class="card"><b>${u.name}</b><br><small>${u.role}</small></div>`).join('');
+    document.getElementById('lager-list').innerHTML = Object.keys(lager).map(n => `<div class="card"><div style="display:flex; justify-content:space-between;"><small>${n}</small><b>${lager[n]}</b><button onclick="openLagerEdit('${n}')">EDIT</button></div></div>`).join('');
+}
+
+function openLagerEdit(n) { currentEditLager = n; document.getElementById('lager-edit-title').innerText = n; openModal('modal-lager-edit'); }
+async function saveLagerEdit() { lager[currentEditLager] = parseInt(document.getElementById('lager-edit-val').value); await save(); closeModals(); renderManagement(); }
+async function saveNewUser() { const n = document.getElementById('new-u-name').value, p = document.getElementById('new-u-pass').value, r = document.getElementById('new-u-role').value; users.push({name:n, pass:p, role:r}); await save(); closeModals(); renderManagement(); }
+function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
+
+setInterval(() => { if(document.getElementById('time-display')) document.getElementById('time-display').innerText = new Date().toLocaleTimeString('de-DE'); }, 1000);
+load();
+
+// PLEXUS SYSTEM
+const canvas = document.getElementById('plexus-bg');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function initParticles() {
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    particles = [];
+    for (let i = 0; i < 100; i++) particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5 });
+}
+function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if(p.x<0||p.x>canvas.width) p.vx*=-1; if(p.y<0||p.y>canvas.height) p.vy*=-1;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fillStyle="rgba(58,109,240,0.5)"; ctx.fill();
+    });
+    requestAnimationFrame(animate);
+}
+initParticles(); animate();
+window.onresize = initParticles;
+</script>
 </body>
 </html>
