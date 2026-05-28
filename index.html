@@ -18,7 +18,7 @@ body{
 
 .login-box,
 .app{
-    width:700px;
+    width:1200px;
     margin:40px auto;
     background:#151515;
     border-radius:20px;
@@ -86,6 +86,28 @@ button:hover{
     border-radius:10px;
 }
 
+.categories{
+    display:flex;
+    gap:20px;
+    justify-content:space-between;
+}
+
+.category-box{
+    width:33%;
+}
+
+.quantity-input{
+    width:60px;
+    padding:8px;
+    margin-right:10px;
+    text-align:center;
+}
+
+.action-box{
+    display:flex;
+    align-items:center;
+}
+
 </style>
 </head>
 <body>
@@ -106,7 +128,7 @@ button:hover{
 
     <h1>🍣 SoulSushi Menü</h1>
 
-    <div id="menu"></div>
+    <div class="categories" id="menu"></div>
 
     <div class="order-list">
         <h2>Bestellung</h2>
@@ -177,13 +199,16 @@ function renderMenu(){
 
     for(let category in menu){
 
+        const categoryBox = document.createElement("div");
+        categoryBox.className = "category-box";
+
         const title = document.createElement("div");
         title.className = "category";
         title.innerHTML = category;
 
-        menuDiv.appendChild(title);
+        categoryBox.appendChild(title);
 
-        menu[category].forEach(item => {
+        menu[category].forEach((item, index) => {
 
             const div = document.createElement("div");
 
@@ -191,31 +216,49 @@ function renderMenu(){
 
             div.innerHTML = `
                 <span>${item.name} - $${item.price}</span>
-                <button onclick="addItem('${item.name}', ${item.price})">
-                    Hinzufügen
-                </button>
+
+                <div class="action-box">
+
+                    <input
+                        type="number"
+                        min="1"
+                        value="1"
+                        id="${item.name}-qty"
+                        class="quantity-input"
+                    >
+
+                    <button onclick="addItem('${item.name}', ${item.price})">
+                        Hinzufügen
+                    </button>
+
+                </div>
             `;
 
-            menuDiv.appendChild(div);
+            categoryBox.appendChild(div);
 
         });
+
+        menuDiv.appendChild(categoryBox);
     }
 }
 
 function addItem(name, price){
 
+    const quantity =
+        parseInt(document.getElementById(name + "-qty").value) || 1;
+
     const found = selected.find(i => i.name === name);
 
     if(found){
 
-        found.amount++;
+        found.amount += quantity;
 
     }else{
 
         selected.push({
             name:name,
             price:price,
-            amount:1
+            amount:quantity
         });
     }
 
@@ -263,4 +306,5 @@ function finishOrder(){
 </body>
 </html>
 ```
+
 
