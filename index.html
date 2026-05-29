@@ -479,44 +479,19 @@ function setDiscount(percent, button){
 
         updateOrder();
 
-       function updateOrder(){
-
-    const orders = document.getElementById("orders");
-
-    orders.innerHTML = "";
-
-    let total = 0;
-
-    // Produkte mit 0 entfernen
-    selected = selected.filter(item => item.amount > 0);
-
-    selected.forEach(item => {
-
-        total += item.price * item.amount;
-
-        const div = document.createElement("div");
-
-        div.innerHTML = `
-            ${item.name} x${item.amount}
-            = $${item.price * item.amount}
-        `;
-
-        orders.appendChild(div);
-
-    });
-
-    const discountAmount =
-        total * (currentDiscount / 100);
-
-    total = total - discountAmount;
-
-    if(total < 0){
-        total = 0;
+        return;
     }
 
-    document.getElementById("total").innerHTML =
-        "Gesamt: $" + Math.round(total);
-}
+    currentDiscount = percent;
+
+    document.querySelectorAll('.discount-buttons button')
+    .forEach(btn => {
+        btn.classList.remove('active-discount');
+    });
+
+    button.classList.add('active-discount');
+
+    updateOrder();
 }
 
 function updateOrder(){
@@ -628,7 +603,7 @@ function finishOrder(){
 
     });
 
-  // Bestellung erfolgreich erstellt
+    alert("Bestellung erfolgreich erstellt!");
 
     selected = [];
 
