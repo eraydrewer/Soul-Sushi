@@ -25,7 +25,7 @@ body{
     box-shadow:0 0 30px rgba(255,140,0,0.3);
 }
 
-h1,h2{
+h1{
     text-align:center;
     color:orange;
 }
@@ -109,8 +109,7 @@ button:hover{
 
 .top-bar{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
+    justify-content:flex-end;
     margin-bottom:15px;
 }
 
@@ -138,10 +137,6 @@ button:hover{
     background:red !important;
 }
 
-.manager-btn{
-    background:red;
-}
-
 </style>
 </head>
 <body>
@@ -161,20 +156,9 @@ button:hover{
 <div class="app" id="app" style="display:none;">
 
     <div class="top-bar">
-
-        <button
-            id="managerButton"
-            class="manager-btn"
-            style="display:none;"
-            onclick="openManagerPanel()"
-        >
-            👑 Manager Bereich
-        </button>
-
         <div class="timer" id="timer">
             01:00:00
         </div>
-
     </div>
 
     <h1>🍣 SoulSushi Menü</h1>
@@ -216,39 +200,14 @@ button:hover{
         Gesamt: $0
     </div>
 
-    <button onclick="finishOrder()">
-        Bestellung abschließen
-    </button>
+    <button onclick="finishOrder()">Bestellung abschließen</button>
 
 </div>
 
 <script>
 
-const accounts = [
-
-    {username:"Mitarbeiter1", password:"Soulsushi67", role:"manager"},
-    {username:"Mitarbeiter2", password:"Soulsushi67", role:"manager"},
-    {username:"Mitarbeiter3", password:"Soulsushi67", role:"manager"},
-    {username:"Mitarbeiter4", password:"Soulsushi67", role:"manager"},
-
-    {username:"Mitarbeiter5", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter6", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter7", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter8", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter9", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter10", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter11", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter12", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter13", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter14", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter15", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter16", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter17", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter18", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter19", password:"Soulsushi67", role:"employee"},
-    {username:"Mitarbeiter20", password:"Soulsushi67", role:"employee"}
-
-];
+const USERNAME = "Mitarbeiter";
+const PASSWORD = "Soulsushi67";
 
 const menu = {
 
@@ -282,48 +241,24 @@ const menu = {
 };
 
 let selected = [];
+
 let timeLeft = 3600;
 let timerInterval;
+
 let currentDiscount = 0;
-let currentUser = "";
-let currentRole = "";
-
-function getStats(){
-
-    return JSON.parse(localStorage.getItem("employeeStats")) || {};
-}
-
-function saveStats(data){
-
-    localStorage.setItem(
-        "employeeStats",
-        JSON.stringify(data)
-    );
-}
 
 function login(){
 
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
 
-    const account = accounts.find(acc =>
-        acc.username === user &&
-        acc.password === pass
-    );
-
-    if(account){
-
-        currentUser = account.username;
-        currentRole = account.role;
+    if(user === USERNAME && pass === PASSWORD){
 
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("app").style.display = "block";
 
-        if(currentRole === "manager"){
-            document.getElementById("managerButton").style.display = "block";
-        }
-
         renderMenu();
+
         startTimer();
 
     }else{
@@ -354,30 +289,26 @@ function startTimer(){
             logout();
         }
 
-    },1000);
+    }, 1000);
 }
 
 function updateTimer(){
 
-    const hours =
-    String(Math.floor(timeLeft / 3600)).padStart(2,'0');
+    const hours = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
 
-    const minutes =
-    String(Math.floor((timeLeft % 3600) / 60)).padStart(2,'0');
+    const minutes = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
 
-    const seconds =
-    String(timeLeft % 60).padStart(2,'0');
+    const seconds = String(timeLeft % 60).padStart(2, '0');
 
     document.getElementById("timer").innerHTML =
-    `${hours}:${minutes}:${seconds}`;
+        `${hours}:${minutes}:${seconds}`;
 }
 
 function logout(){
 
     document.getElementById("app").style.display = "none";
-    document.getElementById("loginBox").style.display = "block";
 
-    document.getElementById("managerButton").style.display = "none";
+    document.getElementById("loginBox").style.display = "block";
 
     selected = [];
 
@@ -400,7 +331,33 @@ function renderMenu(){
     sushiBox.appendChild(sushiTitle);
 
     menu["Sushi"].forEach((item) => {
-        createItem(item, sushiBox);
+
+        const div = document.createElement("div");
+
+        div.className = "item";
+
+        div.innerHTML = `
+            <span>${item.name} - $${item.price}</span>
+
+            <div class="action-box">
+
+                <input
+                    type="number"
+                    min="1"
+                    value="0"
+                    id="${item.name}-qty"
+                    class="quantity-input"
+                >
+
+                <button onclick="addItem('${item.name}', ${item.price})">
+                    Hinzufügen
+                </button>
+
+            </div>
+        `;
+
+        sushiBox.appendChild(div);
+
     });
 
     const dessertTitle = document.createElement("div");
@@ -410,12 +367,38 @@ function renderMenu(){
     sushiBox.appendChild(dessertTitle);
 
     menu["Nachspeise"].forEach((item) => {
-        createItem(item, sushiBox);
+
+        const div = document.createElement("div");
+
+        div.className = "item";
+
+        div.innerHTML = `
+            <span>${item.name} - $${item.price}</span>
+
+            <div class="action-box">
+
+                <input
+                    type="number"
+                    min="1"
+                    value="0"
+                    id="${item.name}-qty"
+                    class="quantity-input"
+                >
+
+                <button onclick="addItem('${item.name}', ${item.price})">
+                    Hinzufügen
+                </button>
+
+            </div>
+        `;
+
+        sushiBox.appendChild(div);
+
     });
 
     menuDiv.appendChild(sushiBox);
 
-    ["Hauptspeise","Getränke"].forEach(category => {
+    ["Hauptspeise", "Getränke"].forEach(category => {
 
         const categoryBox = document.createElement("div");
         categoryBox.className = "category-box";
@@ -427,7 +410,33 @@ function renderMenu(){
         categoryBox.appendChild(title);
 
         menu[category].forEach((item) => {
-            createItem(item, categoryBox);
+
+            const div = document.createElement("div");
+
+            div.className = "item";
+
+            div.innerHTML = `
+                <span>${item.name} - $${item.price}</span>
+
+                <div class="action-box">
+
+                    <input
+                        type="number"
+                        min="1"
+                        value="0"
+                        id="${item.name}-qty"
+                        class="quantity-input"
+                    >
+
+                    <button onclick="addItem('${item.name}', ${item.price})">
+                        Hinzufügen
+                    </button>
+
+                </div>
+            `;
+
+            categoryBox.appendChild(div);
+
         });
 
         menuDiv.appendChild(categoryBox);
@@ -435,45 +444,14 @@ function renderMenu(){
     });
 }
 
-function createItem(item, box){
-
-    const div = document.createElement("div");
-
-    div.className = "item";
-
-    div.innerHTML = `
-        <span>${item.name} - $${item.price}</span>
-
-        <div class="action-box">
-
-            <input
-                type="number"
-                min="1"
-                value="0"
-                id="${item.name}-qty"
-                class="quantity-input"
-            >
-
-            <button onclick="addItem('${item.name}', ${item.price})">
-                Hinzufügen
-            </button>
-
-        </div>
-    `;
-
-    box.appendChild(div);
-}
-
 function addItem(name, price){
 
     const qtyInput =
-    document.getElementById(name + "-qty");
+        document.getElementById(name + "-qty");
 
-    qtyInput.value =
-    parseInt(qtyInput.value) + 1;
+    qtyInput.value = parseInt(qtyInput.value) + 1;
 
-    const found =
-    selected.find(i => i.name === name);
+    const found = selected.find(i => i.name === name);
 
     if(found){
 
@@ -530,15 +508,17 @@ function updateOrder(){
 
         const div = document.createElement("div");
 
-        div.innerHTML =
-        `${item.name} x${item.amount} = $${item.price * item.amount}`;
+        div.innerHTML = `
+            ${item.name} x${item.amount}
+            = $${item.price * item.amount}
+        `;
 
         orders.appendChild(div);
 
     });
 
     const discountAmount =
-    total * (currentDiscount / 100);
+        total * (currentDiscount / 100);
 
     total = total - discountAmount;
 
@@ -547,7 +527,7 @@ function updateOrder(){
     }
 
     document.getElementById("total").innerHTML =
-    "Gesamt: $" + Math.round(total);
+        "Gesamt: $" + Math.round(total);
 }
 
 function finishOrder(){
@@ -561,12 +541,11 @@ function finishOrder(){
         total += item.price * item.amount;
 
         orderText +=
-        `${item.name} x${item.amount} = $${item.price * item.amount}\n`;
-
+            `${item.name} x${item.amount} = $${item.price * item.amount}\n`;
     });
 
     const discountAmount =
-    total * (currentDiscount / 100);
+        total * (currentDiscount / 100);
 
     total = total - discountAmount;
 
@@ -574,79 +553,49 @@ function finishOrder(){
         total = 0;
     }
 
-    let employeeStats = getStats();
-
-    if(!employeeStats[currentUser]){
-
-        employeeStats[currentUser] = {
-
-            orders:0,
-            money:0,
-            history:[]
-        };
-    }
-
-    employeeStats[currentUser].orders += 1;
-
-    employeeStats[currentUser].money +=
-    Math.round(total);
-
-    employeeStats[currentUser].history.push({
-
-        total:Math.round(total),
-
-        date:new Date().toLocaleString()
-
-    });
-
-    saveStats(employeeStats);
-
     const webhook =
-    "DEIN_DISCORD_WEBHOOK";
+    "https://discordapp.com/api/webhooks/1509701828797923349/5zNaeOlzD-5gJl1W-_AR5jjpDCwv2bRdmmFS0xUXCE07WvdyQDleWCEDHZcCsbXwSKNO";
 
     fetch(webhook, {
 
-        method:"POST",
+        method: "POST",
 
-        headers:{
-            "Content-Type":"application/json"
+        headers: {
+            "Content-Type": "application/json"
         },
 
-        body:JSON.stringify({
+        body: JSON.stringify({
 
-            embeds:[
+            embeds: [
                 {
-                    title:"🍣 Neue SoulSushi Bestellung",
+                    title: "🍣 Neue SoulSushi Bestellung",
 
-                    color:16753920,
+                    color: 16753920,
 
-                    fields:[
+                    fields: [
                         {
-                            name:"👤 Mitarbeiter",
-                            value:currentUser
+                            name: "📋 Bestellung",
+                            value: orderText || "Keine Bestellung"
                         },
 
                         {
-                            name:"📋 Bestellung",
-                            value:orderText || "Keine Bestellung"
+                            name: "🏷 Rabatt",
+                            value: currentDiscount + "%",
+                            inline: true
                         },
 
                         {
-                            name:"🏷 Rabatt",
-                            value:currentDiscount + "%"
-                        },
-
-                        {
-                            name:"💰 Gesamt",
-                            value:"$" + Math.round(total)
+                            name: "💰 Gesamt",
+                            value: "$" + Math.round(total),
+                            inline: true
                         }
                     ],
 
-                    footer:{
-                        text:"SoulSushi System"
+                    footer: {
+                        text: "SoulSushi System"
                     },
 
-                    timestamp:new Date()
+                    timestamp: new Date()
                 }
             ]
 
@@ -667,101 +616,9 @@ function finishOrder(){
 
     updateOrder();
 
-    document.querySelectorAll('.quantity-input')
-    .forEach(input => {
+    document.querySelectorAll('.quantity-input').forEach(input => {
         input.value = 0;
     });
-}
-
-function openManagerPanel(){
-
-    let employeeStats = getStats();
-
-    let statsWindow =
-    window.open("", "_blank",
-    "width=900,height=700");
-
-    let html = `
-    <html>
-    <head>
-
-    <title>Manager Bereich</title>
-
-    <style>
-
-    body{
-        background:#111;
-        color:white;
-        font-family:Arial;
-        padding:20px;
-    }
-
-    h1{
-        color:orange;
-    }
-
-    .card{
-        background:#222;
-        padding:15px;
-        margin-top:15px;
-        border-radius:12px;
-    }
-
-    </style>
-
-    </head>
-
-    <body>
-
-    <h1>👑 Mitarbeiter Statistik</h1>
-    `;
-
-    for(let employee in employeeStats){
-
-        const stats = employeeStats[employee];
-
-        html += `
-
-        <div class="card">
-
-            <h2>${employee}</h2>
-
-            <p>
-            📦 Verkäufe:
-            ${stats.orders || 0}
-            </p>
-
-            <p>
-            💰 Umsatz:
-            $${stats.money || 0}
-            </p>
-        `;
-
-        if(stats.history){
-
-            stats.history.forEach(entry => {
-
-                html += `
-
-                <p>
-                📅 ${entry.date}
-                <br>
-                💵 $${entry.total}
-                </p>
-
-                `;
-            });
-        }
-
-        html += `</div>`;
-    }
-
-    html += `
-    </body>
-    </html>
-    `;
-
-    statsWindow.document.write(html);
 }
 
 </script>
