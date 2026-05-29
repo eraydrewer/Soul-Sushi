@@ -288,8 +288,18 @@ let currentDiscount = 0;
 let currentUser = "";
 let currentRole = "";
 
-let employeeStats =
-JSON.parse(localStorage.getItem("employeeStats")) || {};
+function getStats(){
+
+    return JSON.parse(localStorage.getItem("employeeStats")) || {};
+}
+
+function saveStats(data){
+
+    localStorage.setItem(
+        "employeeStats",
+        JSON.stringify(data)
+    );
+}
 
 function login(){
 
@@ -367,6 +377,8 @@ function logout(){
     document.getElementById("app").style.display = "none";
     document.getElementById("loginBox").style.display = "block";
 
+    document.getElementById("managerButton").style.display = "none";
+
     selected = [];
 
     updateOrder();
@@ -388,9 +400,7 @@ function renderMenu(){
     sushiBox.appendChild(sushiTitle);
 
     menu["Sushi"].forEach((item) => {
-
         createItem(item, sushiBox);
-
     });
 
     const dessertTitle = document.createElement("div");
@@ -400,9 +410,7 @@ function renderMenu(){
     sushiBox.appendChild(dessertTitle);
 
     menu["Nachspeise"].forEach((item) => {
-
         createItem(item, sushiBox);
-
     });
 
     menuDiv.appendChild(sushiBox);
@@ -419,9 +427,7 @@ function renderMenu(){
         categoryBox.appendChild(title);
 
         menu[category].forEach((item) => {
-
             createItem(item, categoryBox);
-
         });
 
         menuDiv.appendChild(categoryBox);
@@ -568,6 +574,8 @@ function finishOrder(){
         total = 0;
     }
 
+    let employeeStats = getStats();
+
     if(!employeeStats[currentUser]){
 
         employeeStats[currentUser] = {
@@ -591,10 +599,7 @@ function finishOrder(){
 
     });
 
-    localStorage.setItem(
-        "employeeStats",
-        JSON.stringify(employeeStats)
-    );
+    saveStats(employeeStats);
 
     const webhook =
     "DEIN_DISCORD_WEBHOOK";
@@ -669,6 +674,8 @@ function finishOrder(){
 }
 
 function openManagerPanel(){
+
+    let employeeStats = getStats();
 
     let statsWindow =
     window.open("", "_blank",
