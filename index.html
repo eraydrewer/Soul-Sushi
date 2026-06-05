@@ -216,9 +216,16 @@ button:hover{
 
 <script>
 
-const USERNAME = "Mitarbeiter";
-const PASSWORD = "Soulsushi67";
+const USERS = {
+    "Eray Drewer": "pass1",
+    "Santino Dantonio": "pass2",
+    "Robin August": "pass3",
+    "Enzo Falcone": "pass4",
+    "Bruno Brunn": "pass5",
+    "Leon Toast": "pass6"
+};
 
+let currentEmployee = "";
 const menu = {
 
     "Sushi": [
@@ -262,13 +269,14 @@ function login(){
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
 
-    if(user === USERNAME && pass === PASSWORD){
+    if(USERS[user] && USERS[user] === pass){
+
+        currentEmployee = user;
 
         document.getElementById("loginBox").style.display = "none";
         document.getElementById("app").style.display = "block";
 
         renderMenu();
-
         startTimer();
 
     }else{
@@ -612,24 +620,31 @@ function finishOrder(){
 
                     color: 16753920,
 
-                    fields: [
-                        {
-                            name: "📋 Bestellung",
-                            value: orderText || "Keine Bestellung"
-                        },
+                   fields: [
 
-                        {
-                            name: "🏷 Rabatt",
-                            value: currentDiscount + "%",
-                            inline: true
-                        },
+    {
+        name: "👨‍🍳 Mitarbeiter",
+        value: currentEmployee,
+        inline: true
+    },
 
-                        {
-                            name: "💰 Gesamt",
-                            value: "$" + Math.round(total),
-                            inline: true
-                        }
-                    ],
+    {
+        name: "📋 Bestellung",
+        value: orderText || "Keine Bestellung"
+    },
+
+    {
+        name: "🏷 Rabatt",
+        value: currentDiscount + "%",
+        inline: true
+    },
+
+    {
+        name: "💰 Gesamt",
+        value: "$" + Math.round(total),
+        inline: true
+    }
+],
 
                     footer: {
                         text: "SoulSushi System"
