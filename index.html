@@ -456,25 +456,31 @@ function renderMenu(){
 
 function addItem(name, price){
 
-    const qtyInput =
-        document.getElementById(name + "-qty");
+    const qtyInput = document.getElementById(name + "-qty");
 
-    qtyInput.value = parseInt(qtyInput.value) + 1;
+    const qty = parseInt(qtyInput.value);
+
+    if(isNaN(qty) || qty <= 0){
+        alert("Bitte eine Menge größer als 0 eingeben.");
+        return;
+    }
 
     const found = selected.find(i => i.name === name);
 
     if(found){
 
-        found.amount += 1;
+        found.amount += qty;
 
     }else{
 
         selected.push({
-            name:name,
-            price:price,
-            amount:1
+            name: name,
+            price: price,
+            amount: qty
         });
     }
+
+    qtyInput.value = 0;
 
     updateOrder();
 }
