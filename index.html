@@ -208,6 +208,15 @@ button:hover{
 
     <div class="total" id="total">
         Gesamt: $0
+
+        <div class="order-list">
+    <h2>📊 Umsatz Statistik</h2>
+
+    <div id="stats">
+        Umsatz: $0<br>
+        Bestellungen: 0
+    </div>
+</div>
     </div>
 
     <button onclick="finishOrder()">Bestellung abschließen</button>
@@ -270,6 +279,9 @@ let timeLeft = 3600;
 let timerInterval;
 
 let currentDiscount = 0;
+
+let totalRevenue = 0;
+let totalOrders = 0;
 
 function login(){
 
@@ -667,20 +679,29 @@ function finishOrder(){
 
     // Bestellung erfolgreich erstellt
 
-    selected = [];
+    totalRevenue += total;
+totalOrders++;
 
-    currentDiscount = 0;
+document.getElementById("stats").innerHTML =
+`
+Umsatz: $${Math.round(totalRevenue)}<br>
+Bestellungen: ${totalOrders}
+`;
 
-    document.querySelectorAll('.discount-buttons button')
-    .forEach(btn => {
-        btn.classList.remove('active-discount');
-    });
+selected = [];
 
-    updateOrder();
+currentDiscount = 0;
 
-    document.querySelectorAll('.quantity-input').forEach(input => {
-        input.value = 0;
-    });
+document.querySelectorAll('.discount-buttons button')
+.forEach(btn => {
+    btn.classList.remove('active-discount');
+});
+
+updateOrder();
+
+document.querySelectorAll('.quantity-input').forEach(input => {
+    input.value = 0;
+});
 }
 
 </script>
