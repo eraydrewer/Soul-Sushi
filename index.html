@@ -206,18 +206,8 @@ button:hover{
 
     </div>
 
-<div class="total" id="total">
-    Gesamt: $0
-</div>
-
-<div class="order-list">
-    <h2>📊 Umsatz Statistik</h2>
-
-    <div id="stats">
-        Umsatz: $0<br>
-        Bestellungen: 0
-    </div>
-</div>
+    <div class="total" id="total">
+        Gesamt: $0
     </div>
 
     <button onclick="finishOrder()">Bestellung abschließen</button>
@@ -280,9 +270,6 @@ let timeLeft = 3600;
 let timerInterval;
 
 let currentDiscount = 0;
-
-let totalRevenue = 0;
-let totalOrders = 0;
 
 function login(){
 
@@ -624,34 +611,66 @@ function finishOrder(){
     const webhook =
     "https://discordapp.com/api/webhooks/1509701828797923349/5zNaeOlzD-5gJl1W-_AR5jjpDCwv2bRdmmFS0xUXCE07WvdyQDleWCEDHZcCsbXwSKNO";
 
-   fetch(webhook, {
+    fetch(webhook, {
 
-    method: "POST",
+        method: "POST",
 
-    headers: {
-        "Content-Type": "application/json"
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            embeds: [
+                {
+                    title: "🍣 Neue SoulSushi Bestellung",
+
+                    color: 16753920,
+
+                   fields: [
+
+    {
+        name: "👨‍🍳 Mitarbeiter",
+        value: currentEmployee,
+        inline: true
     },
 
-    body: JSON.stringify({
-        ...
-    })
+    {
+        name: "📋 Bestellung",
+        value: orderText || "Keine Bestellung"
+    },
 
-});
+    {
+        name: "🏷 Rabatt",
+        value: currentDiscount + "%",
+        inline: true
+    },
 
-totalRevenue += total;
-totalOrders++;
+    {
+        name: "💰 Gesamt",
+        value: "$" + Math.round(total),
+        inline: true
+    }
+],
 
-document.getElementById("stats").innerHTML =
-`
-Umsatz: $${Math.round(totalRevenue)}<br>
-Bestellungen: ${totalOrders}
-`;
+                    footer: {
+                        text: "SoulSushi System"
+                    },
 
-// Bestellung erfolgreich erstellt
+                    timestamp: new Date()
+                }
+            ]
 
-selected = [];
+        })
 
-currentDiscount = 0;
+    });
+
+    // Bestellung erfolgreich erstellt
+
+    selected = [];
+
+    currentDiscount = 0;
+
     document.querySelectorAll('.discount-buttons button')
     .forEach(btn => {
         btn.classList.remove('active-discount');
@@ -668,5 +687,4 @@ currentDiscount = 0;
 
 </body>
 </html>
-
 
