@@ -454,6 +454,42 @@ function renderMenu(){
 
     });
 
+    const sommerTitle = document.createElement("div");
+sommerTitle.className = "category";
+sommerTitle.innerHTML = "Sommeraktion";
+
+sushiBox.appendChild(sommerTitle);
+
+menu["sommeraktion"].forEach((item) => {
+
+    const div = document.createElement("div");
+
+    div.className = "item";
+
+    div.innerHTML = `
+        <span>${item.name} - €${item.price}</span>
+
+        <div class="action-box">
+
+            <input
+                type="number"
+                min="0"
+                value="0"
+                id="${item.name}-qty"
+                class="quantity-input"
+            >
+
+            <button onclick="addItem('${item.name}', ${item.price})">
+                Hinzufügen
+            </button>
+
+        </div>
+    `;
+
+    sushiBox.appendChild(div);
+
+});
+
         menuDiv.appendChild(sushiBox);
 
     ["Hauptspeise", "Getränke"].forEach(category => {
