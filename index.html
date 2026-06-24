@@ -456,7 +456,7 @@ function renderMenu(){
 
         menuDiv.appendChild(sushiBox);
 
-    ["Hauptspeise", "Getränke", "sommeraktion"].forEach(category => {
+    ["Hauptspeise", "Getränke"].forEach(category => {
 
         const categoryBox = document.createElement("div");
         categoryBox.className = "category-box";
@@ -496,6 +496,44 @@ function renderMenu(){
             categoryBox.appendChild(div);
 
         });
+
+        if(category === "Hauptspeise"){
+
+    const sommerTitle = document.createElement("div");
+    sommerTitle.className = "category";
+    sommerTitle.innerHTML = "Sommeraktion";
+
+    categoryBox.appendChild(sommerTitle);
+
+    menu["sommeraktion"].forEach((item) => {
+
+        const div = document.createElement("div");
+
+        div.className = "item";
+
+        div.innerHTML = `
+            <span>${item.name} - $${item.price}</span>
+
+            <div class="action-box">
+                <input
+                    type="number"
+                    min="0"
+                    value="0"
+                    id="${item.name}-qty"
+                    class="quantity-input"
+                >
+
+                <button onclick="addItem('${item.name}', ${item.price})">
+                    Hinzufügen
+                </button>
+            </div>
+        `;
+
+        categoryBox.appendChild(div);
+
+    });
+
+}
 
         menuDiv.appendChild(categoryBox);
 
