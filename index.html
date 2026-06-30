@@ -156,13 +156,30 @@ button:hover{
     font-size:12px;
 }
 
+    .login-logo{
+    display:flex;
+    justify-content:center;
+    margin-bottom:20px;
+}
+
+.login-logo img{
+    width:180px;
+    height:auto;
+    border-radius:50%;
+    filter:drop-shadow(0 0 20px rgba(47,183,165,.45));
+}
+
 </style>
 </head>
 <body>
 
 <div class="login-box" id="loginBox">
 
-    <h1>🍣 SoulSushi Login</h1>
+    <div class="login-logo">
+    <img src="image.png" alt="Soul Sushi Logo">
+</div>
+
+<h1>SoulSushi Login</h1>
 
     <input type="text" id="username" placeholder="Benutzername">
 
@@ -230,6 +247,10 @@ button:hover{
     </div>
 
     <button onclick="finishOrder()">Bestellung abschließen</button>
+
+    
+
+    
 
 </div>
 
