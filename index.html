@@ -951,22 +951,44 @@ function updateOrder(){
 
         total += item.price * item.amount;
 
-        const div = document.createElement("div");
+       const div = document.createElement("div");
 
-        div.innerHTML = `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+div.className = "order-item";
 
-                <span>
-                    ${item.name} x${item.amount}
-                    = $${item.price * item.amount}
-                </span>
+div.innerHTML = `
 
-                <button class="remove-btn" onclick="removeItem('${item.name}')">
-                    X
-                </button>
+<div class="order-left">
 
-            </div>
-        `;
+    <div>
+
+        <div class="order-name">
+            ${item.name}
+        </div>
+
+        <div class="order-qty">
+            x${item.amount}
+        </div>
+
+    </div>
+
+</div>
+
+<div class="order-right">
+
+    <div class="order-price">
+        $${item.price * item.amount}
+    </div>
+
+    <button class="remove-btn"
+        onclick="removeItem('${item.name}')">
+
+        ✕
+
+    </button>
+
+</div>
+
+`;
 
         orders.appendChild(div);
 
