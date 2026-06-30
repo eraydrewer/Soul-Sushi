@@ -444,6 +444,60 @@ color:white;
 
 }
 
+    .checkout-panel{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:18px;
+    align-items:stretch;
+}
+
+.checkout-card,
+.total-card{
+    background:#15191d;
+    border:1px solid #273038;
+    border-radius:18px;
+    padding:22px;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);
+}
+
+.checkout-title{
+    color:white;
+    font-size:20px;
+    font-weight:700;
+    margin-bottom:14px;
+}
+
+.orders-box{
+    color:#cfd8dc;
+    min-height:55px;
+}
+
+.total-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.total-card span{
+    color:#8f9aa4;
+    font-size:13px;
+    letter-spacing:3px;
+}
+
+.total-card #total{
+    color:#39c4aa;
+    font-size:34px;
+    font-weight:800;
+    margin-top:8px;
+}
+
+.finish-btn{
+    font-size:16px;
+    border-radius:18px;
+}
+
 </style>
 </head>
 <body>
@@ -506,46 +560,33 @@ color:white;
 
     <div class="categories" id="menu"></div>
 
-    <div class="order-list">
-        <h2>Bestellung</h2>
-        <div id="orders"></div>
+   <div class="checkout-panel">
+
+    <div class="checkout-card">
+        <div class="checkout-title">📋 Bestellung</div>
+        <div id="orders" class="orders-box"></div>
     </div>
 
-    <div class="order-list">
-
-        <h2>Rabatt</h2>
+    <div class="checkout-card">
+        <div class="checkout-title">🏷 Rabatt</div>
 
         <div class="discount-buttons">
-
-            <button onclick="setDiscount(15, this)">
-                15%
-            </button>
-
-            <button onclick="setDiscount(25, this)">
-                25%
-            </button>
-
-            <button onclick="setDiscount(30, this)">
-                30%
-            </button>
-
-             <button onclick="setDiscount(45, this)">
-                45%
-            </button>
-
-            <button onclick="setDiscount(50, this)">
-                50%
-            </button>
-
+            <button onclick="setDiscount(15, this)">15%</button>
+            <button onclick="setDiscount(25, this)">25%</button>
+            <button onclick="setDiscount(30, this)">30%</button>
+            <button onclick="setDiscount(45, this)">45%</button>
+            <button onclick="setDiscount(50, this)">50%</button>
         </div>
-
     </div>
 
-    <div class="total" id="total">
-        Gesamt: $0
+    <div class="total-card">
+        <span>GESAMT</span>
+        <div id="total"> $0</div>
     </div>
 
-    <button onclick="finishOrder()">Bestellung abschließen</button>
+    <button class="finish-btn" onclick="finishOrder()">
+        Bestellung abschließen
+    </button>
 
 </div>
 
