@@ -579,34 +579,6 @@ font-size:14px;
     overflow:hidden;
 }
 
-.app::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    background:
-        radial-gradient(circle at 18% 8%, rgba(57,196,170,.22), transparent 18%),
-        radial-gradient(circle at 85% 10%, rgba(57,196,170,.14), transparent 20%),
-        repeating-radial-gradient(circle at 50% 0%, transparent 0 18px, rgba(57,196,170,.05) 19px 21px);
-    opacity:.75;
-    z-index:0;
-}
-
-.app::after{
-    content:"";
-    position:absolute;
-    right:-80px;
-    top:-70px;
-    width:330px;
-    height:330px;
-    background:
-        linear-gradient(135deg, transparent 35%, rgba(57,196,170,.18) 36%, transparent 38%),
-        linear-gradient(45deg, transparent 35%, rgba(57,196,170,.12) 36%, transparent 38%);
-    transform:rotate(-12deg);
-    opacity:.7;
-    pointer-events:none;
-}
-
 .header,
 .categories,
 .checkout-panel{
@@ -628,6 +600,51 @@ font-size:14px;
     z-index:-1;
 }
 
+    .app{
+    position:relative;
+    overflow:hidden;
+    background:
+        linear-gradient(180deg, rgba(8,18,18,.96), rgba(10,13,16,.98)),
+        #0b0f12;
+}
+
+.app::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(57,196,170,.16), transparent 22%),
+        radial-gradient(circle at 0% 0%, rgba(57,196,170,.10), transparent 18%),
+        radial-gradient(circle at 100% 0%, rgba(57,196,170,.10), transparent 18%);
+}
+
+.app::after{
+    content:"";
+    position:absolute;
+    left:0;
+    top:70px;
+    width:100%;
+    height:120px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.08;
+    background:
+        repeating-radial-gradient(
+            ellipse at center,
+            transparent 0 18px,
+            rgba(57,196,170,.8) 19px 21px
+        );
+}
+
+.header,
+.categories,
+.checkout-panel{
+    position:relative;
+    z-index:1;
+}
+    
 </style>
 </head>
 <body>
