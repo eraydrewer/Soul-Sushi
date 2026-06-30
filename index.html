@@ -82,14 +82,27 @@ h1{
 }
 
 input{
-    width:96%;
-    padding:15px;
-    margin-top:10px;
-    border:none;
-    border-radius:10px;
-    background:#222;
+
+    width:520px;
+
+    height:55px;
+
+    padding:0 18px;
+
+    display:block;
+
+    margin:18px auto;
+
+    background:#1b1f23;
+
+    border:1px solid #303840;
+
+    border-radius:12px;
+
     color:white;
-    font-size:16px;
+
+    font-size:18px;
+
 }
 
 button{
@@ -657,6 +670,67 @@ font-size:14px;
     position:relative;
     z-index:1;
 }
+
+    .login-header{
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:25px;
+
+    margin-bottom:35px;
+
+}
+
+.login-logo{
+
+    width:95px;
+    height:95px;
+    border-radius:50%;
+
+    object-fit:cover;
+
+    box-shadow:0 0 30px rgba(57,196,170,.45);
+
+}
+
+.login-header h1{
+
+    margin:0;
+
+    font-size:52px;
+
+    text-align:left;
+
+}
+
+.login-header p{
+
+    margin-top:8px;
+
+    color:#7f8b95;
+
+    letter-spacing:8px;
+
+    font-size:14px;
+
+}
+
+    .login-box button{
+
+    display:block;
+
+    margin:25px auto 0;
+
+    width:220px;
+
+    height:58px;
+
+    font-size:18px;
+
+    border-radius:14px;
+
+}
     
 </style>
 </head>
@@ -664,7 +738,19 @@ font-size:14px;
 
 <div class="login-box" id="loginBox">
 
-    <h1>🍣 SoulSushi Login</h1>
+   <div class="login-header">
+
+    <img src="image.png" class="login-logo">
+
+    <div>
+
+        <h1>SoulSushi Login</h1>
+
+        <p>MITARBEITERBEREICH</p>
+
+    </div>
+
+</div>
 
     <input type="text" id="username" placeholder="Benutzername">
 
