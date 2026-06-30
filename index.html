@@ -158,28 +158,118 @@ button:hover{
     align-items:center;
 }
 
-.top-bar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
+.header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:40px;
+
 }
 
-.timer{
-    background:#222;
-    padding:10px 20px;
-    border-radius:10px;
-    color:orange;
-    font-size:18px;
-    font-weight:bold;
+.header-logo{
+
+display:flex;
+
+align-items:center;
+
+gap:20px;
+
 }
-    .status{
-    background:#222;
-    padding:10px 20px;
-    border-radius:10px;
-    color:#00ff66;
-    font-size:16px;
-    font-weight:bold;
+
+.header-logo img{
+
+width:90px;
+
+height:90px;
+
+border-radius:50%;
+
+}
+
+.header-logo h1{
+
+margin:0;
+
+font-size:58px;
+
+letter-spacing:3px;
+
+}
+
+.header-logo span{
+
+color:#39c4aa;
+
+}
+
+.header-logo p{
+
+margin:0;
+
+letter-spacing:12px;
+
+color:#aab4be;
+
+font-size:18px;
+
+}
+
+.header-right{
+
+display:flex;
+
+gap:20px;
+
+}
+
+.status-box,
+.timer-box{
+
+background:#1b2025;
+
+border:1px solid #273038;
+
+padding:15px 22px;
+
+border-radius:18px;
+
+min-width:180px;
+
+text-align:center;
+
+}
+
+.status-box small,
+.timer-box small{
+
+display:block;
+
+color:#8f9aa4;
+
+margin-bottom:8px;
+
+}
+
+#status{
+
+color:#39c4aa;
+
+font-weight:bold;
+
+}
+
+#timer{
+
+font-size:26px;
+
+font-weight:bold;
+
+color:white;
+
 }
 
 .discount-buttons{
@@ -225,19 +315,47 @@ button:hover{
 
 <div class="app" id="app" style="display:none;">
 
-  <div class="top-bar">
+  <div class="header">
 
-    <div class="status" id="status">
-        🔴 Nicht eingeloggt
+    <div class="header-logo">
+
+        <img src="image.png">
+
+        <div>
+
+            <h1>SOUL<span>SUSHI</span></h1>
+
+            <p>MENU</p>
+
+        </div>
+
     </div>
 
-    <div class="timer" id="timer">
-        01:00:00
+    <div class="header-right">
+
+        <div class="status-box">
+
+            <small>EINGELOGGT</small>
+
+            <div id="status">
+                Eray Drewer
+            </div>
+
+        </div>
+
+        <div class="timer-box">
+
+            <small>VERBLEIBEND</small>
+
+            <div id="timer">
+                01:00:00
+            </div>
+
+        </div>
+
     </div>
 
 </div>
-
-    <h1>🍣 SoulSushi Menü</h1>
 
     <div class="categories" id="menu"></div>
 
