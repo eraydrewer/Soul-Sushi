@@ -368,6 +368,25 @@ color:white;
     color:#9fb0bd;
 }
 
+    .product-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.product-image{
+    width:58px;
+    height:58px;
+    object-fit:contain;
+    flex-shrink:0;
+}
+
+.product-info{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
 </style>
 </head>
 <body>
@@ -529,11 +548,38 @@ const menu = {
 
 
      "sommeraktion": [
-        {name:"Softeis schokolade ", price:150},
+        {name:"Softeis schokolade", price:150},
         {name:"Softeis Erdbeere", price:150},
         {name:"Softeis Vanille", price:150}
     ]
          
+};
+
+    const productImages = {
+
+    "Nigiri Sushi":"images/nigiri.png",
+    "Maki Sushi":"images/maki.png",
+    "Sashimi Sushi":"images/sign (1).png",
+    "Chirashi Sushi":"images/ChirashiSushi.png",
+    "Inari Sushi":"images/inari-maki.png",
+
+    "Rahmen":"images/ramen.png",
+    "Okonomiyaki":"images/okonomiyaki (1).png",
+    "Hühnchennudeln":"images/noodles.png",
+    "Donburi":"images/donburi.png",
+
+    "Grüntee":"images/green-tea.png",
+    "Litschi Limo":"images/lychee.png",
+    "Bananensaft":"images/banana-smoothie.png",
+    "Ingwer Limo":"images/oolong.png",
+
+    "Schokoerdbeere":"images/strawberry.png",
+    "Mochi":"images/mochi.png",
+
+    "Softeis schokolade":"images/ice-cream.png",
+    "Softeis Erdbeere":"images/ice-cream.png",
+    "Softeis Vanille":"images/ice-cream.png"
+
 };
 
 let selected = [];
@@ -625,25 +671,49 @@ function renderMenu(){
         div.className = "item";
 
         div.innerHTML = `
-            <div class="product-info">
-                <div class="product-name">${item.name}</div>
-                <div class="product-price">$${item.price}</div>
-            </div>
 
-            <div class="action-box">
-                <input
-                    type="number"
-                    min="0"
-                    value="0"
-                    id="${item.name}-qty"
-                    class="quantity-input"
-                >
+<div class="product-left">
 
-                <button class="add-btn" onclick="addItem('${item.name}', ${item.price})">
-                    + Hinzufügen
-                </button>
-            </div>
-        `;
+    <img
+        src="${productImages[item.name]}"
+        class="product-image"
+        alt="${item.name}"
+    >
+
+    <div class="product-info">
+
+        <div class="product-name">
+            ${item.name}
+        </div>
+
+        <div class="product-price">
+            $${item.price}
+        </div>
+
+    </div>
+
+</div>
+
+<div class="action-box">
+
+    <input
+        type="number"
+        min="0"
+        value="0"
+        id="${item.name}-qty"
+        class="quantity-input"
+    >
+
+    <button class="add-btn"
+        onclick="addItem('${item.name}', ${item.price})">
+
+        + Hinzufügen
+
+    </button>
+
+</div>
+
+`;
 
         return div;
     }
