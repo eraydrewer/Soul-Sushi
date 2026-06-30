@@ -351,6 +351,23 @@ color:white;
     font-size:12px;
 }
 
+    .product-info{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.product-name{
+    font-size:18px;
+    font-weight:600;
+    color:white;
+}
+
+.product-price{
+    font-size:15px;
+    color:#9fb0bd;
+}
+
 </style>
 </head>
 <body>
@@ -601,8 +618,35 @@ function logout(){
 function renderMenu(){
 
     const menuDiv = document.getElementById("menu");
-
     menuDiv.innerHTML = "";
+
+    function createItem(item){
+        const div = document.createElement("div");
+        div.className = "item";
+
+        div.innerHTML = `
+            <div class="product-info">
+                <div class="product-name">${item.name}</div>
+                <div class="product-price">$${item.price}</div>
+            </div>
+
+            <div class="action-box">
+                <input
+                    type="number"
+                    min="0"
+                    value="0"
+                    id="${item.name}-qty"
+                    class="quantity-input"
+                >
+
+                <button class="add-btn" onclick="addItem('${item.name}', ${item.price})">
+                    + Hinzufügen
+                </button>
+            </div>
+        `;
+
+        return div;
+    }
 
     const sushiBox = document.createElement("div");
     sushiBox.className = "category-box";
@@ -610,76 +654,22 @@ function renderMenu(){
     const sushiTitle = document.createElement("div");
     sushiTitle.className = "category";
     sushiTitle.innerHTML = "Sushi";
-
     sushiBox.appendChild(sushiTitle);
 
-    menu["Sushi"].forEach((item) => {
-
-        const div = document.createElement("div");
-
-        div.className = "item";
-
-        div.innerHTML = `
-            <span>${item.name} - $${item.price}</span>
-
-            <div class="action-box">
-
-                <input
-                    type="number"
-                    min="0"
-                    value="0"
-                    id="${item.name}-qty"
-                    class="quantity-input"
-                >
-
-                <button onclick="addItem('${item.name}', ${item.price})">
-                    Hinzufügen
-                </button>
-
-            </div>
-        `;
-
-        sushiBox.appendChild(div);
-
+    menu["Sushi"].forEach(item => {
+        sushiBox.appendChild(createItem(item));
     });
 
     const dessertTitle = document.createElement("div");
     dessertTitle.className = "category";
     dessertTitle.innerHTML = "Nachspeise";
-
     sushiBox.appendChild(dessertTitle);
 
-    menu["Nachspeise"].forEach((item) => {
-
-        const div = document.createElement("div");
-
-        div.className = "item";
-
-        div.innerHTML = `
-            <span>${item.name} - $${item.price}</span>
-
-            <div class="action-box">
-
-                <input
-                    type="number"
-                    min="0"
-                    value="0"
-                    id="${item.name}-qty"
-                    class="quantity-input"
-                >
-
-                <button onclick="addItem('${item.name}', ${item.price})">
-                    Hinzufügen
-                </button>
-
-            </div>
-        `;
-
-        sushiBox.appendChild(div);
-
+    menu["Nachspeise"].forEach(item => {
+        sushiBox.appendChild(createItem(item));
     });
 
-        menuDiv.appendChild(sushiBox);
+    menuDiv.appendChild(sushiBox);
 
     ["Hauptspeise", "Getränke"].forEach(category => {
 
@@ -689,79 +679,25 @@ function renderMenu(){
         const title = document.createElement("div");
         title.className = "category";
         title.innerHTML = category;
-
         categoryBox.appendChild(title);
 
-        menu[category].forEach((item) => {
-
-            const div = document.createElement("div");
-
-            div.className = "item";
-
-            div.innerHTML = `
-                <span>${item.name} - $${item.price}</span>
-
-                <div class="action-box">
-
-                    <input
-                        type="number"
-                        min="0"
-                        value="0"
-                        id="${item.name}-qty"
-                        class="quantity-input"
-                    >
-
-                    <button onclick="addItem('${item.name}', ${item.price})">
-                        Hinzufügen
-                    </button>
-
-                </div>
-            `;
-
-            categoryBox.appendChild(div);
-
+        menu[category].forEach(item => {
+            categoryBox.appendChild(createItem(item));
         });
 
         if(category === "Hauptspeise"){
 
-    const sommerTitle = document.createElement("div");
-    sommerTitle.className = "category";
-    sommerTitle.innerHTML = "Sommeraktion";
+            const sommerTitle = document.createElement("div");
+            sommerTitle.className = "category";
+            sommerTitle.innerHTML = "Sommeraktion";
+            categoryBox.appendChild(sommerTitle);
 
-    categoryBox.appendChild(sommerTitle);
-
-    menu["sommeraktion"].forEach((item) => {
-
-        const div = document.createElement("div");
-
-        div.className = "item";
-
-        div.innerHTML = `
-            <span>${item.name} - $${item.price}</span>
-
-            <div class="action-box">
-                <input
-                    type="number"
-                    min="0"
-                    value="0"
-                    id="${item.name}-qty"
-                    class="quantity-input"
-                >
-
-                <button onclick="addItem('${item.name}', ${item.price})">
-                    Hinzufügen
-                </button>
-            </div>
-        `;
-
-        categoryBox.appendChild(div);
-
-    });
-
-}
+            menu["sommeraktion"].forEach(item => {
+                categoryBox.appendChild(createItem(item));
+            });
+        }
 
         menuDiv.appendChild(categoryBox);
-
     });
 }
 
