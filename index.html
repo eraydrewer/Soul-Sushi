@@ -1320,6 +1320,32 @@ function finishOrder(){
 
     const webhook = "https://discordapp.com/api/webhooks/1517721854809342222/-URchBn7bkaHkmRuZzQ5ztiwV1ISPzNJQvQuLeheCXZuUNo0W-4nuh4WSLjuaoiJMgCS";
 
+    fetch("http://localhost:3000/order", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        mitarbeiter: currentEmployee,
+        betrag: Math.round(total),
+        rabatt: currentDiscount,
+        bestellung: selected.map(item => ({
+            name: item.name,
+            preis: item.price,
+            menge: item.amount,
+            summe: item.price * item.amount
+        })),
+        datum: new Date().toISOString()
+    })
+})
+.then(res => res.json())
+.then(data => {
+    console.log("Umsatz gespeichert:", data);
+})
+.catch(error => {
+    console.error("Fehler beim Speichern:", error);
+});
+    
     fetch(webhook, {
         method: "POST",
         headers: {
