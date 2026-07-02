@@ -1318,8 +1318,6 @@ function finishOrder(){
 
     if(total < 0) total = 0;
 
-    const webhook = "https://discordapp.com/api/webhooks/1517721854809342222/-URchBn7bkaHkmRuZzQ5ztiwV1ISPzNJQvQuLeheCXZuUNo0W-4nuh4WSLjuaoiJMgCS";
-
     fetch("https://soulsushiumsatz.onrender.com/order", {
     method: "POST",
     headers: {
@@ -1346,44 +1344,6 @@ function finishOrder(){
     console.error("Fehler beim Speichern:", error);
 });
     
-    fetch(webhook, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            embeds: [{
-                title: "🍣 Neue SoulSushi Bestellung",
-                color: 16753920,
-                fields: [
-                    {
-                        name: "👨‍🍳 Mitarbeiter",
-                        value: currentEmployee,
-                        inline: true
-                    },
-                    {
-                        name: "📋 Bestellung",
-                        value: orderText || "Keine Bestellung"
-                    },
-                    {
-                        name: "🏷 Rabatt",
-                        value: currentDiscount + "%",
-                        inline: true
-                    },
-                    {
-                        name: "💰 Gesamt",
-                        value: "$" + Math.round(total),
-                        inline: true
-                    }
-                ],
-                footer: {
-                    text: "SoulSushi System"
-                },
-                timestamp: new Date().toISOString()
-            }]
-        })
-    });
-
     // Reset
     selected = [];
     currentDiscount = 0;
